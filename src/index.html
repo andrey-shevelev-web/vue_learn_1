@@ -11,22 +11,40 @@
 <body>
     <div id="root" class="container pt-5">
         <div class="card">
-            <h1>{{ title }}</h1>
+            <h1 :style="{
+                    color: inputValue.length < 5 ? 'red' : 'darkblue',
+                    fontSize: inputValue.length < 5 ? '2rem' : '2.4rem'
+                }"
+            >{{ title }}</h1>
             <div class="form-control">
                 <input
                         type="text"
-                        v-bind:placeholder="placeholderString"
-                        v-bind:value="inputValue"
-                        v-on:input="inputChangeHandler"
-                        v-on:keypress.enter="addNoteHandler"
+                        :placeholder="placeholderString"
+                        v-model="inputValue"
+                        @keypress.enter="addNoteHandler"
                 >
             </div>
-            <button class="btn" v-on:click="addNoteHandler">Add</button>
+            <button class="btn" @click="addNoteHandler">Add</button>
             <hr />
             <ul class="list" v-if="notes.length !== 0">
                 <li class="list-item" v-for="(note, idx) in notes">
-                    {{ note }}
-                    <button class="btn danger" v-on:click="delNoteHandler(idx)">Delete</button>
+<!--                    <span :class="note.length < 5 ? 'primary' : 'bold'">{{ idx + 1}}: {{ toUpperCase(note) }}</span>-->
+
+<!--                    <span :class="{-->
+<!--                        'primary': true,-->
+<!--                        'bold': note.length > 5-->
+<!--                    }">-->
+<!--                        {{ idx + 1}}: {{ toUpperCase(note) }}-->
+<!--                    </span>-->
+
+                    <span :class="['bold', {'primary': note.length > 5}]">
+                        {{ idx + 1}}: {{ toUpperCase(note) }}
+                    </span>
+                    <button class="btn danger" @click="delNoteHandler(idx)">Delete</button>
+                </li>
+                <hr />
+                <li>
+                    <strong>Total: {{ notes.length }}</strong> | double: {{ doubleCountComputed }}
                 </li>
             </ul>
             <div v-else>Заметок нет. Добавьте</div>
